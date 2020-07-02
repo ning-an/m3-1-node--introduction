@@ -24,6 +24,23 @@ express()
       res.status(200).json({ status: 200, message});
     }, randomTime);
   })
+
+  .get('/monkey-message', (req, res) => {
+    const messages = [
+      'Don’t monkey around with me.',
+      'If you pay peanuts, you get monkeys.',
+      'I fling 💩 at you!',
+      '🙊',
+      '🙈',
+      '🙉',
+    ];
+    const randomTime = Math.random() * 3000;
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    const message = { author: 'monkey', text: messages[randomIndex]};
+    setTimeout( () => {
+      res.status(200).json( { status: 200, message });
+    }, randomTime)
+  })
   // add new endpoints here ☝️
   // ---------------------------------
   // Nothing to modify below this line
