@@ -38,7 +38,15 @@ express()
     const randomIndex = Math.floor(Math.random() * messages.length);
     const message = { author: 'monkey', text: messages[randomIndex]};
     setTimeout( () => {
-      res.status(200).json( { status: 200, message });
+      res.status(200).json( { status: 200, message});
+    }, randomTime)
+  })
+
+  .get('/parrot-message', (req, res) => {
+    const randomTime = Math.random() * 3000;
+    const message = {author: 'parrot', text: req.query.messageInput }
+    setTimeout( () => {
+      res.status(200).json({status: 200, message})
     }, randomTime)
   })
   // add new endpoints here ☝️
