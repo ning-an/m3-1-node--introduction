@@ -4,6 +4,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
+let jokeTriger = false;
+
 express()
   // Below are methods that are included in express(). We chain them for convenience.
   // --------------------------------------------------------------------------------
@@ -45,6 +47,39 @@ express()
   .get('/parrot-message', (req, res) => {
     const randomTime = Math.random() * 3000;
     const message = {author: 'parrot', text: req.query.messageInput }
+    setTimeout( () => {
+      res.status(200).json({status: 200, message})
+    }, randomTime)
+  })
+
+
+  .get('/bot-message', (req, res) => {
+    let myMsgO = req.query.messageInput;
+    let myMsg = myMsgO.toLowerCase();
+    let botMsg;
+    const commonGreetings = ['hi', 'hello', 'howdy'];
+    const commonGoodbyes = ['bye', 'see you', 'ciao'];
+    const jokes = [
+      'I told my wife she was drawing her eyebrows too high. She looked surprised.',
+      'My wife accused me of being immature. I told her to get out of my fort.',
+      'How does Moses make his coffee? Hebrews it.'
+    ]
+    let randomJoke = jokes[Math.floor(Math.random() * 3)];
+    if (myMsg === 'something funny') {
+      jokeTriger = true;
+      botMsg = 'BZZT WANT A JOKE?';
+    } else if ((jokeTriger && myMsg === 'no') || commonGoodbyes.some( elem => myMsg.indexOf(elem) > -1)) {
+      jokeTriger = false;
+      botMsg = 'BZZT GOODBYE';
+    } else if (jokeTriger && myMsg === 'yes') {
+      botMsg = `BZZT "${randomJoke}"\nWANT ANOTHER ONE?`;
+    } else if (commonGreetings.some( elem => myMsg.indexOf(elem) > -1)) {
+      botMsg = 'BZZT HELLO';
+    } else {
+      botMsg = `BZZT "${myMsgO}"`;
+    }
+    const message = { author: 'bot', text: botMsg };
+    const randomTime = Math.random() * 3000;
     setTimeout( () => {
       res.status(200).json({status: 200, message})
     }, randomTime)
